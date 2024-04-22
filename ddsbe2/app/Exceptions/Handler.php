@@ -16,7 +16,7 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    //use APIResponser;
+    use APIResponser;
 
     /**
      * A list of the exception types that should not be reported.
@@ -62,56 +62,56 @@ class Handler extends ExceptionHandler
             $code = $exception->getStatusCode();
             $message = Response::$statusTexts[$code];
 
-            //return $this->errorResponse($message, $code);
+            return $this->errorResponse($message, $code);
 
-            return response()->json([
-                'error' => $message,
-                'code' => $code
-            ], $code);
+            // return response()->json([
+            //     'error' => $message,
+            //     'code' => $code
+            // ], $code);
         }
 
         // instance not found
         if ($exception instanceof ModelNotFoundException) {
             $model = strtolower(class_basename($exception->getModel()));
 
-            //return $this->errorResponse("Does not exist any instance of {$model} with the given id", Response::HTTP_NOT_FOUND);
+            return $this->errorResponse("Does not exist any instance of {$model} with the given id", Response::HTTP_NOT_FOUND);
 
-            return response()->json([
-                'error' => "Does not exist any instance of {$model} with the given id",
-                'code' => Response::HTTP_NOT_FOUND
-            ], Response::HTTP_NOT_FOUND);
+            // return response()->json([
+            //     'error' => "Does not exist any instance of {$model} with the given id",
+            //     'code' => Response::HTTP_NOT_FOUND
+            // ], Response::HTTP_NOT_FOUND);
         }
 
         // validation exception
         if ($exception instanceof ValidationException) {
             $errors = $exception->validator->errors()->getMessages();
 
-            //return $this->errorResponse($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->errorResponse($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
 
-            return response()->json([
-                'errors' => $errors,
-                'code' => Response::HTTP_UNPROCESSABLE_ENTITY
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            // return response()->json([
+            //     'errors' => $errors,
+            //     'code' => Response::HTTP_UNPROCESSABLE_ENTITY
+            // ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         // access to forbidden
         if ($exception instanceof AuthorizationException) {
-            //return $this->errorResponse($exception->getMessage(), Response::HTTP_FORBIDDEN);
+            return $this->errorResponse($exception->getMessage(), Response::HTTP_FORBIDDEN);
 
-            return response()->json([
-                'error' => $exception->getMessage(),
-                'code' => Response::HTTP_FORBIDDEN
-            ], Response::HTTP_FORBIDDEN);
+            // return response()->json([
+            //     'error' => $exception->getMessage(),
+            //     'code' => Response::HTTP_FORBIDDEN
+            // ], Response::HTTP_FORBIDDEN);
         }
 
         // unauthorized access
         if ($exception instanceof AuthenticationException) {
-            //return $this->errorResponse($exception->getMessage(), Response::HTTP_UNAUTHORIZED);
+            return $this->errorResponse($exception->getMessage(), Response::HTTP_UNAUTHORIZED);
 
-            return response()->json([
-                'error' => $exception->getMessage(),
-                'code' => Response::HTTP_UNAUTHORIZED
-            ], Response::HTTP_UNAUTHORIZED);
+            // return response()->json([
+            //     'error' => $exception->getMessage(),
+            //     'code' => Response::HTTP_UNAUTHORIZED
+            // ], Response::HTTP_UNAUTHORIZED);
         }
 
         // if you are running in development environment
@@ -119,12 +119,12 @@ class Handler extends ExceptionHandler
             return parent::render($request, $exception);
         }
 
-        //return $this->errorResponse('Unexpected error. Try later', Response::HTTP_INTERNAL_SERVER_ERROR);
+        return $this->errorResponse('Unexpected error. Try later', Response::HTTP_INTERNAL_SERVER_ERROR);
 
-        return response()->json([
-            'error' => 'Unexpected error. Try later',
-            'code' => Response::HTTP_INTERNAL_SERVER_ERROR
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        // return response()->json([
+        //     'error' => 'Unexpected error. Try later',
+        //     'code' => Response::HTTP_INTERNAL_SERVER_ERROR
+        // ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
 }

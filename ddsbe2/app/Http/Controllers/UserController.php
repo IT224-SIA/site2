@@ -9,6 +9,8 @@ use DB;
 
 class UserController extends Controller
 {
+    use ApiResponser;
+
     private $request;
     public function __construct(Request $request)
     {
@@ -26,9 +28,9 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return response()->json($users, 200);
+        //return response()->json($users, 200);
 
-        //return $this->successResponse($users);
+        return $this->successResponse($users);
 
     }
     public function add(Request $request)
@@ -43,9 +45,9 @@ class UserController extends Controller
 
         $user = User::create($request->all());
 
-        return response()->json($user, 200);
+        //return response()->json($user, 200);
 
-        //return $this->successResponse($user, Response:HTTP_CREATED);
+        return $this->successResponse($user, Response::HTTP_CREATED);
     }
     /**
      * Obtains and show one user
@@ -54,7 +56,8 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return response()->json($user, 200);
+        //return response()->json($user, 200);
+        return $this->successResponse($user);
 
         // old code 
         /*
@@ -90,7 +93,9 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json($user, 200);
+        //return response()->json($user, 200);
+        return $this->successResponse($user);
+
         // old code
         /*
         $this->validate($request, $rules);
@@ -120,7 +125,8 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return response()->json($user, 200);
+        //return response()->json($user, 200);
+        return $this->successResponse($user);
 
         // old code 
         /*

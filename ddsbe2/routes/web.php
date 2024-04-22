@@ -17,8 +17,12 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+// unsecure routes 
+//$router->group(['prefix' => 'api'], function () use ($router) {$router->get('/users',['uses' => 'UserController@getUsers']);});
 
 $router->get('/users', ['uses' => 'UserController@getUsers']);
+
+$router->get('/users', ['uses' => 'UserController@index']);
 
 $router->post('/users', ['uses' => 'UserController@add']);
 
